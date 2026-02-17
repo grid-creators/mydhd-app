@@ -1,0 +1,10 @@
+# Database (contains user data)
+conference.db
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+
+# Claude
+.claude/
