@@ -1,6 +1,6 @@
 # My DHd App
 
-A personal conference companion for [DHd 2026](https://dhd2026.digitalhumanities.de/) – the annual conference of the Association for Digital Humanities in the German-speaking world, held in Vienna (24–27 February 2026).
+A personal conference companion for [DHd 2026](https://dhd2026.digitalhumanities.de/) – the annual conference of the Association for Digital Humanities in the German-speaking world, held in Vienna (23–27 February 2026).
 
 Live at: **https://mydhd.grid-creators.com**
 
