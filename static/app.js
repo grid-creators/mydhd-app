@@ -1,3 +1,5 @@
+history.scrollRestoration = 'manual';
+
 document.addEventListener('DOMContentLoaded', () => {
     fetchData();
     updateAuthUI();
@@ -15,7 +17,7 @@ let currentTimeSlot = null; // null means show all time slots, or a time slot st
 const TIME_SLOTS = {
     '2026-02-24': ['9:00\u201312:30', '9:00\u201317:30', '14:00\u201317:30', 'ab 18:00'],
     '2026-02-25': ['9:00\u201310:30', '11:00\u201312:30', '12:30\u201314:00', '14:00\u201315:30', '16:00\u201318:00'],
-    '2026-02-26': ['9:00\u201310:30', '11:00\u201312:30', '14:00\u201315:30', '16:00\u201317:30', 'ab 18:00'],
+    '2026-02-26': ['9:00\u201310:30', '11:00\u201312:30', '12:30\u201314:00', '14:00\u201315:30', '16:00\u201317:30', 'ab 18:00'],
     '2026-02-27': ['9:00\u201310:30', '11:00\u201312:30', 'ab 14:00']
 };
 let currentUser = null; // username if logged in
@@ -61,6 +63,8 @@ async function fetchData() {
                 localStorage.removeItem('dhd2026_user');
             }
         }
+
+        navigateToHash();
 
     } catch (error) {
         console.error('Error loading schedule:', error);
@@ -259,6 +263,74 @@ function showSyncError() {
     document.body.appendChild(toast);
 
     setTimeout(() => toast.remove(), 5000);
+}
+
+function shareSession(title, time, location, anchor) {
+    const url = anchor
+        ? `${window.location.origin}${window.location.pathname}#${encodeURIComponent(anchor)}`
+        : `${window.location.origin}${window.location.pathname}`;
+    const textParts = [title];
+    if (time) textParts.push(time);
+    if (location) textParts.push(location);
+    const text = textParts.join(' – ') + ' #DHd2026';
+
+    if (navigator.share) {
+        navigator.share({ title, text, url }).catch(() => {});
+    } else {
+        navigator.clipboard.writeText(url).then(() => {
+            showCopyToast();
+        }).catch(() => {
+            showCopyToast(url);
+        });
+    }
+}
+
+function showCopyToast(fallbackUrl) {
+    const existing = document.getElementById('copy-toast');
+    if (existing) existing.remove();
+
+    const toast = document.createElement('div');
+    toast.id = 'copy-toast';
+    toast.className = 'toast';
+
+    const content = document.createElement('div');
+    content.className = 'toast-content';
+
+    const icon = document.createElement('span');
+    icon.className = 'material-icons';
+    icon.textContent = fallbackUrl ? 'info' : 'check_circle';
+    content.appendChild(icon);
+
+    const p = document.createElement('p');
+    p.textContent = fallbackUrl
+        ? `Link: ${fallbackUrl}`
+        : 'Link in die Zwischenablage kopiert';
+    content.appendChild(p);
+
+    const closeBtn = document.createElement('button');
+    closeBtn.className = 'close-btn';
+    closeBtn.textContent = '×';
+    closeBtn.addEventListener('click', () => toast.remove());
+    content.appendChild(closeBtn);
+
+    toast.appendChild(content);
+    document.body.appendChild(toast);
+    setTimeout(() => toast.remove(), 3000);
+}
+
+function createShareButton(title, time, location, sid) {
+    const btn = document.createElement('button');
+    btn.className = 'btn-share';
+    btn.title = 'Teilen';
+    btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        shareSession(title, time, location, sid);
+    });
+    const icon = document.createElement('span');
+    icon.className = 'material-icons';
+    icon.textContent = 'share';
+    btn.appendChild(icon);
+    return btn;
 }
 
 function buildDayFilterBar() {
@@ -603,6 +675,7 @@ function renderSessionCard(session, day, sid) {
 
     const actions = document.createElement('div');
     actions.className = 'card-actions';
+    actions.appendChild(createShareButton(session.title, session.time, session.location, 'session-' + sid));
     const bookmarkBtn = document.createElement('button');
     bookmarkBtn.className = 'btn-bookmark active';
     bookmarkBtn.addEventListener('click', () => toggleBookmark(sid));
@@ -621,7 +694,7 @@ function renderPresentationCard(item) {
     const { type, session, pres, bookmarkId } = item;
     const card = document.createElement('div');
     card.className = 'session-card';
-    card.dataset.type = type === 'talk' ? 'Vortragssession' : 'Poster Session';
+    card.dataset.type = type === 'poster' ? 'Poster Session' : session.type;
 
     const meta = document.createElement('div');
     meta.className = 'session-meta';
@@ -637,7 +710,7 @@ function renderPresentationCard(item) {
     }
     const typeSpan = document.createElement('span');
     typeSpan.className = 'session-type';
-    typeSpan.textContent = type === 'talk' ? 'Vortrag' : 'Poster';
+    typeSpan.textContent = type === 'poster' ? 'Poster' : (session.type === 'Doctoral Consortium' ? 'DC-Beitrag' : 'Vortrag');
     meta.appendChild(typeSpan);
     card.appendChild(meta);
 
@@ -699,6 +772,9 @@ function renderPresentationCard(item) {
 
     const actions = document.createElement('div');
     actions.className = 'card-actions';
+    const presAnchorMatch = bookmarkId.match(/^(.+)::(talk|poster)-(\d+)$/);
+    const presAnchor = presAnchorMatch ? `pres-${presAnchorMatch[1]}-${presAnchorMatch[3]}` : null;
+    actions.appendChild(createShareButton(pres.title, session.time, session.location, presAnchor));
     const bookmarkBtn = document.createElement('button');
     bookmarkBtn.className = 'btn-bookmark active';
     const toggleFn = type === 'talk' ? toggleTalkBookmark : togglePosterBookmark;
@@ -735,7 +811,7 @@ function render() {
                 if (currentTimeSlot && !sessionMatchesTimeSlot(session, currentTimeSlot, day.date)) return;
                 const sessionStart = session.time ? parseTime(session.time.split('\u2013')[0].trim()) : 0;
 
-                if (session.type === 'Vortragssession' && session.presentations) {
+                if ((session.type === 'Vortragssession' || session.type === 'Doctoral Consortium') && session.presentations) {
                     // Individual talk bookmarks
                     session.presentations.forEach((pres, presIdx) => {
                         const talkId = generateTalkId(session, day.date, presIdx);
@@ -946,6 +1022,8 @@ function render() {
                         presTitle.textContent = pres.title;
                         presHeader.appendChild(presTitle);
 
+                        presHeader.appendChild(createShareButton(pres.title, session.time, session.location, `pres-${sid}-${presIdx}`));
+
                         if (isPosterSession) {
                             const posterId = generatePosterId(session, day.date, presIdx);
                             const posterSaved = savedPosterIds.has(posterId);
@@ -962,7 +1040,7 @@ function render() {
                             pIcon.textContent = posterSaved ? 'bookmark' : 'bookmark_border';
                             posterBtn.appendChild(pIcon);
                             presHeader.appendChild(posterBtn);
-                        } else if (session.type === 'Vortragssession') {
+                        } else if (session.type === 'Vortragssession' || session.type === 'Doctoral Consortium') {
                             const talkId = generateTalkId(session, day.date, presIdx);
                             const talkSaved = savedTalkIds.has(talkId);
                             const talkBtn = document.createElement('button');
@@ -1017,10 +1095,12 @@ function render() {
                 });
             }
 
-            // Bookmark button (not for Vortragssessions — those use per-talk bookmarks)
-            if (session.type !== 'Vortragssession') {
+            // Actions bar (share + bookmark) — only for sessions without sub-events
+            if (!(session.presentations && session.presentations.length > 0)) {
                 const actions = document.createElement('div');
                 actions.className = 'card-actions';
+
+                actions.appendChild(createShareButton(session.title, session.time, session.location, 'session-' + sid));
 
                 const bookmarkBtn = document.createElement('button');
                 bookmarkBtn.className = `btn-bookmark ${isSaved ? 'active' : ''}`;
@@ -1077,7 +1157,23 @@ function render() {
     }
 }
 
-function navigateToSession(bookmarkId, presIndex) {
+function navigateToHash() {
+    let hash;
+    try {
+        hash = decodeURIComponent(window.location.hash.slice(1));
+    } catch (e) {
+        hash = window.location.hash.slice(1);
+    }
+    if (!hash) return;
+    if (hash.startsWith('session-')) {
+        navigateToSession(hash.slice('session-'.length), null, true);
+    } else if (hash.startsWith('pres-')) {
+        const m = hash.match(/^pres-(.+)-(\d+)$/);
+        if (m) navigateToSession(m[1], parseInt(m[2], 10), true);
+    }
+}
+
+function navigateToSession(bookmarkId, presIndex, instant) {
     closePersonModal();
     // Switch to Übersicht tab
     currentTab = 'all';
@@ -1094,25 +1190,26 @@ function navigateToSession(bookmarkId, presIndex) {
         const sessionEl = document.getElementById(`session-${bookmarkId}`);
         if (!sessionEl) return;
 
+        // Always expand the abstract section
+        const abstractSection = sessionEl.querySelector('.session-abstract');
+        if (abstractSection && abstractSection.classList.contains('hidden')) {
+            abstractSection.classList.remove('hidden');
+            const icon = sessionEl.querySelector('.expand-icon');
+            if (icon) icon.textContent = 'expand_less';
+        }
+
         if (presIndex != null) {
-            // Expand the abstract section first
-            const abstractSection = sessionEl.querySelector('.session-abstract');
-            if (abstractSection && abstractSection.classList.contains('hidden')) {
-                abstractSection.classList.remove('hidden');
-                const icon = sessionEl.querySelector('.expand-icon');
-                if (icon) icon.textContent = 'expand_less';
-            }
             // Scroll to the specific presentation
             const presEl = document.getElementById(`pres-${bookmarkId}-${presIndex}`);
             if (presEl) {
-                presEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                presEl.scrollIntoView({ behavior: instant ? 'instant' : 'smooth', block: 'center' });
                 presEl.classList.add('highlight');
                 setTimeout(() => presEl.classList.remove('highlight'), 2000);
                 return;
             }
         }
 
-        sessionEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        sessionEl.scrollIntoView({ behavior: instant ? 'instant' : 'smooth', block: 'center' });
         sessionEl.classList.add('highlight');
         setTimeout(() => sessionEl.classList.remove('highlight'), 2000);
     }, 100);
@@ -1270,7 +1367,7 @@ function buildPersonIndex() {
                 session.presentations.forEach((pres, presIdx) => {
                     // For Poster Sessions and Vortragssessions, use individual presentation title
                     let presRef = sessionRef;
-                    if ((session.type === 'Poster Session' || session.type === 'Vortragssession') && pres.title) {
+                    if ((session.type === 'Poster Session' || session.type === 'Vortragssession' || session.type === 'Doctoral Consortium') && pres.title) {
                         presRef = {
                             ...sessionRef,
                             pres_title: pres.title,
@@ -1389,7 +1486,7 @@ function renderPersonList(persons) {
 
             // Determine bookmark type and state
             let isSaved, toggleFn, checkFn;
-            if (ref.type === 'Vortragssession' && ref.pres_index != null) {
+            if ((ref.type === 'Vortragssession' || ref.type === 'Doctoral Consortium') && ref.pres_index != null) {
                 const talkId = `${ref.bookmark_id}::talk-${ref.pres_index}`;
                 isSaved = savedTalkIds.has(talkId);
                 toggleFn = () => toggleTalkBookmark(talkId);

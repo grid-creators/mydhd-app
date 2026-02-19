@@ -322,6 +322,15 @@ body {
     align-items: center;
 }
 
+.presentation-header .btn-share {
+    padding: 2px;
+    flex-shrink: 0;
+}
+
+.presentation-header .btn-share .material-icons {
+    font-size: 20px;
+}
+
 .btn-poster-bookmark .material-icons,
 .btn-talk-bookmark .material-icons {
     font-size: 20px;
@@ -377,10 +386,31 @@ body {
 /* Actions */
 .card-actions {
     display: flex;
-    justify-content: flex-end;
+    justify-content: space-between;
+    align-items: center;
     margin-top: 10px;
     border-top: 1px solid #eee;
     padding-top: 10px;
+}
+
+.btn-share {
+    background: none;
+    border: none;
+    border-radius: 50%;
+    padding: 8px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #999;
+}
+
+.btn-share .material-icons {
+    font-size: 22px;
+}
+
+.btn-share:hover {
+    color: var(--primary-color);
 }
 
 .btn-bookmark {

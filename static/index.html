@@ -3,13 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DHd 2026 Programm</title>
+    <meta property="og:title" content="My DHd App">
+    <meta property="og:description" content="Dein persönlicher DHd Konferenzbegleiter">
+    <meta property="og:image" content="https://mydhd.grid-creators.com/logo.png">
+    <meta property="og:url" content="https://mydhd.grid-creators.com">
+    <meta property="og:type" content="website">
+    <title>My DHd App</title>
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
 <body>
     <header class="app-header">
-        <h1>DHd 2026</h1>
+        <h1>My DHd 2026</h1>
         <nav class="main-nav">
             <button id="btn-all" class="nav-btn active" onclick="switchTab('all')">Übersicht</button>
             <button id="btn-my" class="nav-btn" onclick="switchTab('my')">Mein Programm</button>
@@ -32,7 +37,7 @@
     <div id="login-hint" class="toast hidden">
         <div class="toast-content">
             <span class="material-icons info-icon">info</span>
-            <p>Bitte loggen Sie sich ein, um Ihr Programm dauerhaft zu speichern.</p>
+            <p>Bitte loggen Sie sich ein, um Ihr Programm geräteübergreifend zu sehhen.</p>
             <button onclick="closeToast()" class="close-btn">&times;</button>
         </div>
     </div>

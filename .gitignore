@@ -1,6 +1,9 @@
 # Database (contains user data)
 conference.db
 
+# Scripts with sensitive data
+checkuser.py
+
 # Python
 __pycache__/
 *.py[cod]

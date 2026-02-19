@@ -968,6 +968,18 @@
           "location": "BIG Hörsaal"
         },
         {
+          "time": "12:30–14:00",
+          "title": "AG-Treffen: Sammlungen als Daten",
+          "type": "Treffen",
+          "location": "Hörsaal 6"
+        },
+        {
+          "time": "12:30–14:00",
+          "title": "AG-Treffen: OER.net",
+          "type": "Treffen",
+          "location": "Hörsaal 1"
+        },
+        {
           "time": "14:00–15:30",
           "session_id": "Mittwoch 3:1",
           "title": "Panel: Nicht nur Text, nicht nur Daten … aber was dann? – 'Theoretisieren' durch Praktiken in der digitalen Editorik, der Digital History und den Computational Literary Studies",
@@ -1412,6 +1424,12 @@
           "title": "Poster Slam",
           "type": "Poster Slam",
           "location": "Audimax"
+        },
+        {
+          "time": "12:30–14:00",
+          "title": "Treffen von AK Digitale Kunstgeschichte",
+          "type": "Treffen",
+          "location": "Hörsaal 2"
         },
         {
           "time": "14:00–15:30",
@@ -1956,6 +1974,12 @@
           ]
         },
         {
+          "time": "15:30–16:30",
+          "title": "AG-Treffen: Public DH",
+          "type": "Treffen",
+          "location": "Hörsaal 1"
+        },
+        {
           "time": "16:00–17:30",
           "session_id": "Donnerstag 4",
           "title": "Poster Session 2",
@@ -2478,12 +2502,30 @@
           "type": "Panel",
           "location": "BIG Hörsaal",
           "authors": [
-            {"name": "Jacqueline Klusik-Eckert", "affiliation": "HHU Düsseldorf"},
-            {"name": "Julia Neubauer", "affiliation": "Germanisches Nationalmuseum Nürnberg"},
-            {"name": "Peter Bell", "affiliation": "Philipps-Universität Marburg"},
-            {"name": "Holger Simon", "affiliation": "Deutsches Bergbau-Museum Bochum"},
-            {"name": "Sylvia Stegbauer", "affiliation": "Österreichische Galerie Belvedere, Belvedere Research Center"},
-            {"name": "Chiara Zuanni", "affiliation": "Universität für Weiterbildung Krems"}
+            {
+              "name": "Jacqueline Klusik-Eckert",
+              "affiliation": "HHU Düsseldorf"
+            },
+            {
+              "name": "Julia Neubauer",
+              "affiliation": "Germanisches Nationalmuseum Nürnberg"
+            },
+            {
+              "name": "Peter Bell",
+              "affiliation": "Philipps-Universität Marburg"
+            },
+            {
+              "name": "Holger Simon",
+              "affiliation": "Deutsches Bergbau-Museum Bochum"
+            },
+            {
+              "name": "Sylvia Stegbauer",
+              "affiliation": "Österreichische Galerie Belvedere, Belvedere Research Center"
+            },
+            {
+              "name": "Chiara Zuanni",
+              "affiliation": "Universität für Weiterbildung Krems"
+            }
           ],
           "abstract": "Das Panel nimmt die Ergebnisse der Umfrage Is there a Digital Art Historian at the DHd? zum Ausgangspunkt, um die Präsenz kunsthistorischer Themen auf DHd-Jahrestagungen kritisch zu beleuchten. Diskutiert wird, inwieweit sich eine bild- und objektzentrierte Forschung in einer traditionell textbasierten DH-Landschaft behaupten kann. Die Panelist*innen thematisieren dabei Aspekte institutioneller Integration (Lehre, Professuren, Curricula), Community-Strukturen sowie Herausforderungen der internen Wissenschaftskommunikation – insbesondere vor dem Hintergrund fragmentierter sozialer Medien und schwach ausgeprägter Austauschformate.\nDas Panel dient als interdisziplinärer Diskussionsraum und richtet sich explizit an alle der DHd, explizit auch an Personen, die bisher einen großen Bogen um die Kunst- und Kulturwissenschaften gemacht haben. Ziel des Panels ist es, aus der internen sowie externen Perspektive auf eine Fachcommunity Handlungsperspektiven zu entwickeln, um die interdisziplinäre Wissenschaftscommunity DHd zu stärken."
         },
@@ -2653,11 +2695,26 @@
           "type": "Panel",
           "location": "BIG Hörsaal",
           "authors": [
-            {"name": "Matthias Arnold", "affiliation": "Central European University"},
-            {"name": "Alíz Horváth", "affiliation": "Max Planck Institut für Wissenschaftsgeschichte"},
-            {"name": "Sarah Lang", "affiliation": "Universität Heidelberg"},
-            {"name": "Jonas Müller-Laackman", "affiliation": "SUB, Universität Hamburg"},
-            {"name": "Torsten Roeder", "affiliation": "Uni Würzburg"}
+            {
+              "name": "Matthias Arnold",
+              "affiliation": "Central European University"
+            },
+            {
+              "name": "Alíz Horváth",
+              "affiliation": "Max Planck Institut für Wissenschaftsgeschichte"
+            },
+            {
+              "name": "Sarah Lang",
+              "affiliation": "Universität Heidelberg"
+            },
+            {
+              "name": "Jonas Müller-Laackman",
+              "affiliation": "SUB, Universität Hamburg"
+            },
+            {
+              "name": "Torsten Roeder",
+              "affiliation": "Uni Würzburg"
+            }
           ],
           "abstract": "This proposal takes up the concept of the “dark sides of DH,” which emerged as a disciplinary discourse about ten years ago (cf. Chun et al. 2016). However, we now adopt this once specific concept as a lens through which to examine current challenges facing the field. At the same time, we see these concerns not only as important problems, but also as opportunities and new frontiers. They can therefore be reframed as the bright sides of DH, since we, as a field, are in a position to take positive and proactive action in response. After approximately 45 minutes of discussion, we will open the floor to the audience to encourage dialogue within the community about how we can best tackle these issues, together leaning into the bright-side potentials of our field."
         },
